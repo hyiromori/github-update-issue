@@ -1,6 +1,6 @@
-# update-github-issue
+# github-issue
 
-GitHub Issue の情報を (ZenHubも含めて) 更新するDeno製のCLIツール。
+GitHub Issue の情報をZenHubを含めて操作するDeno製のCLIツール。
 
 ## 準備
 
