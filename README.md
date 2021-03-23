@@ -41,3 +41,16 @@ $ update-issue \
 以下リンクを参考に Deno をインストールしてください。
 
 https://github.com/denoland/deno_install/blob/master/README.md
+
+### ビルド
+
+```bash
+$ ./build.sh
+# -> dist/update-issue
+```
+
+### ローカルでの実行
+
+```bash
+$ deno run --allow-net --allow-env ./src/index.ts [options...]
+```
