@@ -23,25 +23,28 @@ GitHub Issue の情報をZenHubを含めて操作するDeno製のCLIツール。
 
 ## 実行方法
 
+### 作成
+
 ```bash
 $ github-issue create \
     --title "Issue Title" \
+    --owner "Repository Owner" \
     --repository "Repository Name" \
-    --labels "label1,label2" \
+    --label "label1" --label "label2" \
+    --epic-url "GitHub Issue URL" \
     --pipeline "ZenHub Pipeline Name" \
-    --workspace "ZenHub Workspace ID" \
-    --epic-url 'GitHub Issue URL' \
+    --workspace "ZenHub Workspace ID"
 ```
 
 ### 更新
 
 ```bash
 $ github-issue update \
-    --labels "label1,label2" \
+    --label "label1" --label "label2" \
+    --epic-url 'GitHub Issue URL' \
     --pipeline "ZenHub Pipeline Name" \
     --workspace "ZenHub Workspace ID" \
-    --epic-url 'GitHub Issue URL' \
-    'GitHub URL'...
+    "GitHub URL"...
 ```
 
 ### ZenHub Workspace ID の取得方法
