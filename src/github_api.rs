@@ -1,8 +1,7 @@
 #![allow(non_snake_case)]
-use std::env;
-use std::collections::HashMap;
 use reqwest::Response;
 use serde::Serialize;
+use std::env;
 
 fn get_authorization_header_for_github() -> String {
     match env::var("GITHUB_ACCESS_TOKEN") {
@@ -17,11 +16,14 @@ pub struct GraphQlRequest<T: Serialize> {
     variables: T,
 }
 
-pub async fn request_github_graphql_api<T: Serialize>(query: String, variables: T) -> Result<Response, Box<dyn std::error::Error>> {
+pub async fn request_github_graphql_api<T: Serialize>(
+    query: String,
+    variables: T,
+) -> Result<Response, Box<dyn std::error::Error>> {
     let url = "https://api.github.com/graphql";
     let req = GraphQlRequest { query, variables };
     let body: String = serde_json::to_string(&req).unwrap();
-    println!("{}", &body);
+    // println!("{}", &body);
 
     let res = reqwest::Client::new()
         .post(url)
