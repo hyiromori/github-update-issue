@@ -1,5 +1,7 @@
-mod github;
-use crate::github::get_github_issue;
+mod github_issue;
+mod github_api;
+
+use crate::github_issue::get_github_issue;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
