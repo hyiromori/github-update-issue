@@ -31,18 +31,18 @@ pub struct GitHubIssue {
 struct Variables {
     owner: String,
     repo: String,
-    issue: i32,
+    issue_number: i32,
 }
 
 pub async fn get_github_issue(
     owner: &String,
     repo: &String,
-    issue: &i32,
+    issue_number: &i32,
 ) -> Result<GitHubIssue, Box<dyn std::error::Error>> {
     let query = String::from(
-        "query ($owner: String!, $repo: String!, $issue: Int!) {
+        "query ($owner: String!, $repo: String!, $issue_number: Int!) {
            repository(owner: $owner, name: $repo) {
-             issue(number: $issue) {
+             issue(number: $issue_number) {
                body
                createdAt
                number
@@ -56,7 +56,7 @@ pub async fn get_github_issue(
     let variables = Variables {
         owner: String::from(owner),
         repo: String::from(repo),
-        issue: issue.clone(),
+        issue_number: issue_number.clone(),
     };
 
     let response = request_github_graphql_api(query, variables).await?;
