@@ -1,5 +1,5 @@
 #![allow(non_snake_case)]
-use crate::github_api::request_github_graphql_api;
+use crate::github::github_api::request_github_graphql_api;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Debug)]
