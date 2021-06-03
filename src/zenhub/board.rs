@@ -20,9 +20,6 @@ pub async fn get_board(
     );
     let response = get_zenhub_api(&path).await?;
     if response.status() == 200 {
-        // let data = response.text().await?;
-        // println!("{:#?}", data);
-        // Ok(vec![] as Vec<Pipeline>)
         let data: ResponseData = response.json::<ResponseData>().await?;
         Ok(data.pipelines)
     } else {

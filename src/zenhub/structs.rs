@@ -44,3 +44,10 @@ pub struct PipelineForZenHubIssue {
 pub struct Estimate {
     pub value: i32,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct EpicIssue {
+    issue_number: i32,
+    repo_id: i32,
+    issue_url: String,
+}

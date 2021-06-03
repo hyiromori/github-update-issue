@@ -23,7 +23,6 @@ pub async fn request_github_graphql_api<T: Serialize>(
     let url = "https://api.github.com/graphql";
     let req = GraphQlRequest { query, variables };
     let body: String = serde_json::to_string(&req).unwrap();
-    // println!("{}", &body);
 
     let res = reqwest::Client::new()
         .post(url)

@@ -36,6 +36,7 @@ pub async fn move_pipeline(
     issue_number: &i32,
     pipeline_id: &String,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    // https://github.com/ZenHubIO/API#move-an-issue-between-pipelines
     let path = format!(
         "/p2/workspaces/{workspace_id}/repositories/{repo_id}/issues/{issue_number}/moves",
         workspace_id = workspace_id,
