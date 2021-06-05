@@ -1,8 +1,10 @@
-#![allow(non_snake_case)]
-use crate::github::github_api::request_github_graphql_api;
+#[macro_use]
 use base64::decode;
+use crate::github::github_api::request_github_graphql_api;
+use crate::github::structs::{Owner, OwnerType};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use std::fmt;
 use std::io::{Error, ErrorKind};
 
 #[derive(Deserialize, Debug)]
@@ -23,15 +25,14 @@ pub struct Viewer {
 
 #[derive(Deserialize, Debug)]
 struct Organizations {
-    nodes: Vec<OrganizationNode>,
+    nodes: Vec<Organization>,
 }
 
 #[derive(Deserialize, Debug)]
-struct OrganizationNode {
-    login: String
+struct Organization {
+    login: String,
 }
-
-pub async fn get_owners() -> Result<Vec<String>, Box<dyn std::error::Error>> {
+pub async fn get_github_owners() -> Result<Vec<Owner>, Box<dyn std::error::Error>> {
     let query = String::from(
         "query {
            viewer {
@@ -47,17 +48,20 @@ pub async fn get_owners() -> Result<Vec<String>, Box<dyn std::error::Error>> {
 
     let response = request_github_graphql_api(query, ()).await?;
     if response.status() != 200 {
-        return Err(Box::new(Error::new(
-            ErrorKind::Other,
-            "Failed get_owners",
-        )));
+        return Err(Box::new(Error::new(ErrorKind::Other, "Failed get_owners")));
     }
 
     let mut owners = vec![];
     let data = response.json::<ResponseRoot>().await?;
-    owners.push(data.data.viewer.login);
+    owners.push(Owner {
+        login: data.data.viewer.login,
+        owner_type: OwnerType::User,
+    });
     for org in data.data.viewer.organizations.nodes {
-        owners.push(org.login);
+        owners.push(Owner {
+            login: org.login,
+            owner_type: OwnerType::Organization,
+        });
     }
 
     Ok(owners)

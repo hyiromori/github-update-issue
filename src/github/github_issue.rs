@@ -1,5 +1,5 @@
-#![allow(non_snake_case)]
 use crate::github::github_api::request_github_graphql_api;
+use crate::github::structs::GitHubIssue;
 use serde::{Deserialize, Serialize};
 use std::io::{Error, ErrorKind};
 
@@ -16,16 +16,6 @@ struct Data {
 #[derive(Deserialize, Debug)]
 struct Repository {
     issue: GitHubIssue,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct GitHubIssue {
-    pub body: String,
-    pub createdAt: String,
-    pub number: i32,
-    pub title: String,
-    pub updatedAt: String,
-    pub url: String,
 }
 
 #[derive(Serialize, Debug)]
