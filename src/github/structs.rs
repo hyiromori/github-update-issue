@@ -2,7 +2,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Owner {
     pub login: String,
     pub owner_type: OwnerType,
@@ -19,7 +19,7 @@ impl fmt::Display for Owner {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum OwnerType {
     User,
     Organization,
@@ -35,7 +35,7 @@ impl fmt::Display for OwnerType {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct GitHubIssue {
     pub body: String,
     pub createdAt: String,

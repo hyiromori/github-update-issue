@@ -37,7 +37,7 @@ pub struct Repositories {
     nodes: Vec<Repository>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct Repository {
     id: String,
     pub name: String,
@@ -65,12 +65,12 @@ impl Repository {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct OwnerForRepo {
     pub login: String,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Clone, Debug)]
 pub struct Variables {
     owner: String,
 }

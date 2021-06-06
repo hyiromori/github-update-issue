@@ -1,4 +1,5 @@
 mod github;
+mod subcommand;
 mod util;
 mod zenhub;
 
@@ -7,6 +8,7 @@ use crate::github::github_issue::get_github_issue;
 use crate::github::github_owners::get_github_owners;
 use crate::github::github_repo::get_github_repos;
 use crate::github::structs::Owner;
+use crate::subcommand::config::config;
 use crate::util::config::{get_config_file_path, read_config, write_config, Config};
 use crate::zenhub::board::get_board;
 use crate::zenhub::epic::get_epic_issues;
@@ -21,53 +23,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let subcommand = String::from(&args[1]);
     let args: Vec<String> = args.split_off(2);
 
-    println!("{:?}", read_config().unwrap().workspace_name);
-
-    let owners = get_github_owners().await?;
-    let owner = select_in_menu(&owners);
-    match owner {
-        None => {
-            panic!("Owner not found or unselected.")
-        }
-        Some(val) => {
-            println!("Owner    : {owner_name}", owner_name = val.login);
-        }
+    if subcommand == String::from("config") {
+        config(&args).await?;
     }
-
-    let repos = get_github_repos(&owner.unwrap()).await?;
-    let repo = select_in_menu(&repos);
-    match repo {
-        None => {
-            panic!("Repo not found or unselected.")
-        }
-        Some(val) => {
-            println!(
-                "Repo     : {repo_owner}/{repo_name}",
-                repo_owner = val.owner.login,
-                repo_name = val.name
-            );
-        }
-    }
-
-    let workspaces = get_zenhub_workspaces(&repo.unwrap().get_repo_id()).await?;
-    let workspace = select_in_menu(&workspaces);
-    match workspace {
-        None => {
-            panic!("Workspace not found or unselected.")
-        }
-        Some(val) => {
-            println!(
-                "Workspace: {workspace_name} (ID: {workspace_id})",
-                workspace_name = val.name,
-                workspace_id = val.id
-            );
-            write_config(&Config {
-                workspace_id: String::from(&val.id),
-                workspace_name: String::from(&val.name),
-            });
-            println!("Config saved: {}", get_config_file_path());
-        }
-    }
+    // panic!(format!("Undefined subcommand: {}", subcommand));
 
     // let workspace_id: String = String::from("606c08cc26504900173dc46e");
     // let pipeline_id: String = String::from("Z2lkOi8vcmFwdG9yL1BpcGVsaW5lLzIzNjU5NTk"); // New Issue
@@ -93,13 +52,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // println!("{:#?}", pipelines);
     // println!("{:#?}", epic_issues);
     Ok(())
-}
-
-fn select_in_menu<T: fmt::Display>(collection: &Vec<T>) -> Option<&T> {
-    if collection.is_empty() {
-        return None;
-    }
-    let mut menu = youchoose::Menu::new(collection.iter());
-    let index: usize = menu.show().first().unwrap().clone();
-    Some(&collection[index])
 }
