@@ -5,6 +5,8 @@ use std::io::{BufReader, Read};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
+    pub repo_name: String,
+    pub repo_id: String,
     pub workspace_id: String,
     pub workspace_name: String,
 }

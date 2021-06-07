@@ -8,7 +8,7 @@ struct ResponseData {
     pipelines: Vec<Pipeline>,
 }
 
-pub async fn get_board(
+pub async fn get_pipelines(
     workspace_id: &String,
     repo_id: &String,
 ) -> Result<Vec<Pipeline>, Box<dyn std::error::Error>> {

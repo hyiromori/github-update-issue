@@ -7,49 +7,32 @@ use crate::zenhub::workspace::get_zenhub_workspaces;
 pub async fn config(_args: &Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     let owners = get_github_owners().await?;
     let owner = select_in_menu(&String::from("Select repo owner"), &owners);
-    match &owner {
-        None => {
-            panic!("Owner not found or unselected.")
-        }
-        Some(val) => {
-            println!("Owner    : {owner_name}", owner_name = val.login);
-        }
+    if owner.is_none() {
+        panic!("Owner not found or unselected.")
     }
+    let owner = owner.unwrap();
 
-    let repos = get_github_repos(&owner.unwrap()).await?;
+    let repos = get_github_repos(&owner).await?;
     let repo = select_in_menu(&String::from("Select repo"), &repos);
-    match &repo {
-        None => {
-            panic!("Repo not found or unselected.")
-        }
-        Some(val) => {
-            println!(
-                "Repo     : {repo_owner}/{repo_name}",
-                repo_owner = val.owner.login,
-                repo_name = val.name
-            );
-        }
+    if repo.is_none() {
+        panic!("Repo not found or unselected.")
     }
+    let repo = repo.unwrap();
 
-    let workspaces = get_zenhub_workspaces(&repo.unwrap().get_repo_id()).await?;
+    let workspaces = get_zenhub_workspaces(&repo.get_repo_id()).await?;
     let workspace = select_in_menu(&String::from("Select ZenHub workspace"), &workspaces);
-    match workspace {
-        None => {
-            panic!("Workspace not found or unselected.")
-        }
-        Some(val) => {
-            println!(
-                "Workspace: {workspace_name} (ID: {workspace_id})",
-                workspace_name = val.name,
-                workspace_id = val.id
-            );
-            let _ = write_config(&Config {
-                workspace_id: String::from(&val.id),
-                workspace_name: String::from(&val.name),
-            });
-            println!("Config saved: {}", get_config_file_path());
-        }
-    };
+    if workspace.is_none() {
+        panic!("Workspace not found or unselected.")
+    }
+    let workspace = workspace.unwrap();
+
+    let _ = write_config(&Config {
+        repo_id: String::from(&repo.get_repo_id()),
+        repo_name: String::from(&repo.name),
+        workspace_id: String::from(&workspace.id),
+        workspace_name: String::from(&workspace.name),
+    });
+    println!("Config saved: {}", get_config_file_path());
 
     Ok(())
 }

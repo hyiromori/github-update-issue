@@ -25,6 +25,12 @@ pub struct Pipeline {
     pub issues: Vec<ZenHubIssueForPipeline>,
 }
 
+impl ToString for Pipeline {
+    fn to_string(&self) -> String {
+        format!("{name}", name = self.name)
+    }
+}
+
 #[derive(Deserialize, Clone, Debug)]
 pub struct ZenHubIssueForPipeline {
     pub estimate: Option<Estimate>,
